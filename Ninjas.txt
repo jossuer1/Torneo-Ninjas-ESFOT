@@ -1,0 +1,10 @@
+Naruto,10,9,8,Ninjutsu,3
+Sasuke,9,10,7,Genjutsu,2
+Sakura,7,9,9,Taijutsu,1
+Kakashi,8,9,8,Ninjutsu,2
+Rock Lee,9,10,10,Taijutsu,2
+Neji,8,9,8,Byakugan,1
+Gaara,9,7,10,Defensivo,1
+Hinata,7,8,7,Byakugan,0
+Shikamaru,6,7,8,Estrategia,1
+Jiraiya,10,7,9,Sennin,2
