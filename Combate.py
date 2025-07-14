@@ -3,6 +3,8 @@ from tkinter import messagebox
 import random
 import os 
 
+#--------------Cargar_Archivo-----------------------------------
+
 def cargar_ninjas_desde_archivo(ruta="ninjas.txt"):
     lista = []
     try:
@@ -21,4 +23,32 @@ def cargar_ninjas_desde_archivo(ruta="ninjas.txt"):
     except FileNotFoundError:
         print("No se encontró el archivo 'ninjas.txt'.")
     return lista
+
+#--------------Interfaz---------------------------
+
+def iniciar_Combate():
+    ninjas = cargar_ninjas_desde_archivo()
+    nombres = [n['nombre'] for n in ninjas]
+
+    ventana = tk.Tk()
+    ventana.title("Combate Ninjas")
+    ventana.geometry("400x300")
+
+    tk.Label(ventana, text="Selecciona Primer Ninja : ").pack()
+    ninja1 = tk.StringVar(ventana) #guarda seleccionado del menu
+    ninja1.set(nombres[0] if nombres else "")
+    menu1 = tk.OptionMenu(ventana, ninja1 , *nombres)
+    menu1.pack()# se guarda vodo vertical
+
+    tk.Label(ventana, text="Selecciona Segundo Ninja : ").pack()
+    ninja2 = tk.StringVar(ventana)
+    ninja2.set(nombres[1] if len(nombres) > 1 else "")
+    menu2 = tk.OptionMenu(ventana, ninja2, *nombres)
+    menu2.pack()# se guarda vodo vertical
+
+    tk.Button(ventana, text="Simular combate").pack(pady=10)
+
+    ventana.mainloop()
+if __name__ == "__main__":
+    iniciar_Combate()
 
