@@ -46,9 +46,43 @@ def iniciar_Combate():
     menu2 = tk.OptionMenu(ventana, ninja2, *nombres)
     menu2.pack()# se guarda vodo vertical
 
-    tk.Button(ventana, text="Simular combate").pack(pady=10)
+    def simular_combate():
+        n1 = ninja1.get()
+        n2 = ninja2.get()
+
+        if n1 == n2:
+            messagebox.showwarning("Error","Debes seleccionar dos ninjas")
+            return
+        
+        ninja_a = None
+        ninja_b = None
+
+        for n in ninjas:
+            if n["nombre"] == n1:
+                ninja_a = n
+            elif n["nombre"] == n2:
+                ninja_b = n
+        
+        puntos_a = ninja_a["fuerza"] + ninja_a["agilidad"] + ninja_a["resistencia"] + random.randint(0, 5)
+        puntos_b = ninja_b["fuerza"] + ninja_b["agilidad"] + ninja_b["resistencia"] + random.randint(0, 5)
+
+        resultado = f"{n1}: {puntos_a} pts\n{n2}: {puntos_b} pts\n"
+
+        if puntos_a > puntos_b:
+            resultado += f"🏆 Ganador: {n1}"
+        elif puntos_b > puntos_a:
+            resultado += f"🏆 Ganador: {n2}"
+        else:
+            ganador = random.choice([n1, n2])
+            resultado += f"🏆 Empate, ganador aleatorio: {ganador}"
+        
+        messagebox.showinfo("Resultado del combate", resultado)
+
+
+    tk.Button(ventana, text="Simular combate",command=simular_combate).pack(pady=10)
 
     ventana.mainloop()
+    
+
 if __name__ == "__main__":
     iniciar_Combate()
-
