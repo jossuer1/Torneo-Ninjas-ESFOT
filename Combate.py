@@ -3,6 +3,12 @@ from tkinter import messagebox
 import random
 import os 
 
+#--------------Guardar_Archivo----------------------------------
+
+def guardar_ganador(nombre, archivo="ganadores1vs1.txt"):
+    with open(archivo, "a", encoding="utf-8") as f:
+        f.write(nombre + "\n")
+
 #--------------Cargar_Archivo-----------------------------------
 
 def cargar_ninjas_desde_archivo(ruta="ninjas.txt"):
@@ -38,13 +44,13 @@ def iniciar_Combate():
     ninja1 = tk.StringVar(ventana) #guarda seleccionado del menu
     ninja1.set(nombres[0] if nombres else "")
     menu1 = tk.OptionMenu(ventana, ninja1 , *nombres)
-    menu1.pack()# se guarda vodo vertical
+    menu1.pack()
 
     tk.Label(ventana, text="Selecciona Segundo Ninja : ").pack()
     ninja2 = tk.StringVar(ventana)
     ninja2.set(nombres[1] if len(nombres) > 1 else "")
     menu2 = tk.OptionMenu(ventana, ninja2, *nombres)
-    menu2.pack()# se guarda vodo vertical
+    menu2.pack()
 
     def simular_combate():
         n1 = ninja1.get()
@@ -70,11 +76,16 @@ def iniciar_Combate():
 
         if puntos_a > puntos_b:
             resultado += f"🏆 Ganador: {n1}"
+            guardar_ganador(n1)
+
         elif puntos_b > puntos_a:
             resultado += f"🏆 Ganador: {n2}"
+            guardar_ganador(n2)
+
         else:
             ganador = random.choice([n1, n2])
             resultado += f"🏆 Empate, ganador aleatorio: {ganador}"
+            guardar_ganador(ganador)
         
         messagebox.showinfo("Resultado del combate", resultado)
 
