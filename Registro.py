@@ -1,6 +1,7 @@
-import tkinter as tk 
+import tkinter as tk
 from tkinter import messagebox
-#Opcion para registrarse o iniciar sesion
+
+# Opción para registrarse o iniciar sesión
 while True:
     print("---------------Registro--------------------")
     print("1. Registrarse")
@@ -11,6 +12,7 @@ while True:
         break  
     else:
         print(" Opción no válida. Por favor, ingrese (1) o (2): ")
+
 # Opción para registrar nuevo usuario
 if registro == "1":
     nombre = input("Ingrese un nombre y un apellido: ")
@@ -52,10 +54,10 @@ if registro == "1":
             print("Contraseña segura registrada.")
             break
         else:
-            print("⚠️ La contraseña no cumple con los requisitos. Inténtelo de nuevo.")
-print("----------Registro Exitoso------------")
+            print(" La contraseña no cumple con los requisitos. Inténtelo de nuevo.")
+    print("----------Registro Exitoso------------")
 
-with open("usuarios.txt", "a") as archivo:
+    with open("usuarios.txt", "a") as archivo:
         archivo.write(f"Nombre: {nombre}\n")
         archivo.write(f"Identificación: {identificacion}\n")
         archivo.write(f"Edad: {edad}\n")
@@ -63,8 +65,30 @@ with open("usuarios.txt", "a") as archivo:
         archivo.write(f"Contraseña: {contraseña}\n")
         archivo.write("-" * 40 + "\n")  # Separador entre registros
 
-print("Tu registro ha sido guardado exitosamente.")
-#Inciar sesion despues de haberse registrado
+    print("Tu registro ha sido guardado exitosamente.")
 
+# Opción de iniciar sesión
+elif registro == "2":
+    print("---------------Iniciar Sesión--------------------")
+    
+    while True:  # Bucle while para solicitar datos hasta que sean correctos
+        usuario_login = input("Ingrese su correo: ")
+        contraseña_login = input("Ingrese su contraseña: ")
+        
+        # Verificar si el usuario y la contraseña existen en el archivo
+        usuario_encontrado = False
+        with open("usuarios.txt", "r") as archivo:
+            lineas = archivo.readlines()
+            for i in range(0, len(lineas), 6):  # Cada usuario ocupa 6 líneas
+                usuario_guardado = lineas[i + 3].strip().split(": ")[1]  # Correo guardado en la línea 4
+                contraseña_guardada = lineas[i + 4].strip().split(": ")[1]  # Contraseña guardada en la línea 5
 
-      
+                if usuario_guardado == usuario_login and contraseña_guardada == contraseña_login:
+                    usuario_encontrado = True
+                    break
+
+        if usuario_encontrado:
+            print("Inicio de sesión exitoso.")
+            break  # Sale del bucle mientras los datos son correctos
+        else:
+            print("Usuario o contraseña incorrectos. Inténtelo de nuevo.")
