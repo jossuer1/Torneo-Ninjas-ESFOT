@@ -8,6 +8,30 @@ import os
 def guardar_ganador(nombre, archivo="ganadores1vs1.txt"):
     with open(archivo, "a", encoding="utf-8") as f:
         f.write(nombre + "\n")
+#--------------Mostrar Ganadores----------------------------------
+
+def mostrar_ganadores(archivo="ganadores1vs1.txt"):
+
+    with open(archivo, "r", encoding="utf-8") as f:
+        nombres = [line.strip() for line in f if line.strip()]
+
+    if not nombres:
+        messagebox.showinfo("Ganadores", "No hay ganadores registrados aún.")
+        return
+
+    conteo_victorias = {}
+    for nombre in nombres:
+        if nombre in conteo_victorias:
+            conteo_victorias[nombre] += 1
+        else:
+            conteo_victorias[nombre] = 1
+
+    line2 = ""
+    for nombre, cantidad in conteo_victorias.items():
+        line2 += f"{nombre}: {cantidad} 🏆victorias\n"
+
+    messagebox.showinfo("Ganadores registrados", line2)
+
 
 #--------------Cargar_Archivo-----------------------------------
 
@@ -57,7 +81,7 @@ def iniciar_Combate():
         n2 = ninja2.get()
 
         if n1 == n2:
-            messagebox.showwarning("Error","Debes seleccionar dos ninjas")
+            messagebox.showwarning("Error","Debes seleccionar dos ninjas diferentes")
             return
         
         ninja_a = None
@@ -91,6 +115,8 @@ def iniciar_Combate():
 
 
     tk.Button(ventana, text="Simular combate",command=simular_combate).pack(pady=10)
+
+    tk.Button(ventana, text="Ver ganadores", command=mostrar_ganadores).pack(pady=5)
 
     ventana.mainloop()
     
