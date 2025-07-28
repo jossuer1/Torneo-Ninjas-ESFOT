@@ -1,12 +1,14 @@
 import random
 
+# ---------- Clase Nodo ----------
 class NodoHabilidad:
     def __init__(self, nombre, puntos):
-        self.nombre = nombre
-        self.puntos = puntos
-        self.izquierda = None
-        self.derecha = None
+        self.nombre = nombre            # Nombre de la técnica (ej: Rasengan)
+        self.puntos = puntos            # Puntos de poder de la técnica
+        self.izquierda = None           # Habilidad menor
+        self.derecha = None             # Habilidad mayor
 
+# ---------- Clase Árbol de Habilidades ----------
 class ArbolHabilidades:
     def __init__(self, habilidades=None):
         self.raiz = None
@@ -33,27 +35,23 @@ class ArbolHabilidades:
             else:
                 self._insertar_recursivo(actual.derecha, nuevo)
 
-    # --- Métodos de recorrido que suman puntos ---
-
+    # ---------- Recorridos que suman puntos ----------
     def recorrido_preorden(self, nodo):
         if nodo is None:
             return 0
-        # Nodo, Izquierda, Derecha
         return nodo.puntos + self.recorrido_preorden(nodo.izquierda) + self.recorrido_preorden(nodo.derecha)
 
     def recorrido_inorden(self, nodo):
         if nodo is None:
             return 0
-        # Izquierda, Nodo, Derecha
         return self.recorrido_inorden(nodo.izquierda) + nodo.puntos + self.recorrido_inorden(nodo.derecha)
 
     def recorrido_postorden(self, nodo):
         if nodo is None:
             return 0
-        # Izquierda, Derecha, Nodo
         return self.recorrido_postorden(nodo.izquierda) + self.recorrido_postorden(nodo.derecha) + nodo.puntos
 
-    # Método opcional para mostrar el árbol (útil para debug)
+    # ---------- Mostrar árbol ----------
     def mostrar(self, nodo=None, nivel=0, lado="Raíz"):
         if nivel == 0 and nodo is None:
             nodo = self.raiz
@@ -63,7 +61,7 @@ class ArbolHabilidades:
         self.mostrar(nodo.izquierda, nivel + 1, "Izq")
         self.mostrar(nodo.derecha, nivel + 1, "Der")
 
-    # Método para buscar nodo por nombre (opcional)
+    # ---------- Buscar por nombre (opcional) ----------
     def buscar_por_nombre(self, nombre, nodo=None):
         if nodo is None:
             nodo = self.raiz
@@ -76,6 +74,7 @@ class ArbolHabilidades:
             return encontrado
         return self.buscar_por_nombre(nombre, nodo.derecha)
 
+# ---------- Generar árbol con 5 técnicas aleatorias ----------
 def generar_arbol_habilidades():
     habilidades = [
         ("Rasengan", 5),

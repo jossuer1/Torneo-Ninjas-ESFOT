@@ -1,9 +1,12 @@
 from collections import deque
-from Arbol import simular_combate  
+from Combate import simular_combate, cargar_ninjas_desde_archivo
+
+ninjas = cargar_ninjas_desde_archivo()  
 
 def torneo(ninjas):
-    print("=== Inicio Torneo Ninja ===")
-    participantes = ninjas[:16]  
+    print("-"*30)
+    print("=== Inicio Torneo Chunin Ninja ===")
+    participantes = ninjas[:16]  # Solo los primeros 16
 
     ronda_num = 1
     cola = deque(participantes)
@@ -29,7 +32,8 @@ def torneo(ninjas):
         ronda_num += 1
 
     campeon = cola[0]
-    print(f"\n🏆 Campeón absoluto del torneo: {campeon['nombre']} 🏆")
+    print(f"\n🏆 Campeón Chunin del torneo: {campeon['nombre']} 🏆")
+    print("-"*30)
     return campeon["nombre"]
 
 
