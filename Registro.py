@@ -1,75 +1,5 @@
-def registrar_usuario():
-    # Opción para registrar nuevo usuario
-    nombre = input("Ingrese un nombre y un apellido: ")
-    identificacion = input("Ingrese su identificación (Cédula o pasaporte): ")
-    edad = input("Ingrese su edad: ")
-    usuario = input("Registre un correo válido: ")
+from jugador import menujugador
 
-    def validar_contraseña(contraseña):
-        # Ver si es menor a 8 para retornar un falso
-        if len(contraseña) < 8:
-            return False
-
-        # Verificar si hay al menos una mayúscula
-        tiene_mayuscula = any(c.isupper() for c in contraseña)
-        if not tiene_mayuscula:
-            return False
-
-        # Verificar si hay al menos un número
-        tiene_numero = any(c.isdigit() for c in contraseña)
-        if not tiene_numero:
-            return False
-
-        return True
-
-    # Bucle para asegurar que la contraseña cumpla los requisitos
-    while True:
-        contraseña = input("Ingrese una contraseña segura (mínimo 8 caracteres, 1 mayúscula, 1 número): ")
-        if validar_contraseña(contraseña):
-            print("Contraseña segura registrada.")
-            break
-        else:
-            print("La contraseña no cumple con los requisitos. Inténtelo de nuevo.")
-
-    print("----------Registro Exitoso------------")
-
-    with open("usuarios.txt", "a", encoding="utf-8") as archivo:
-        archivo.write(f"Nombre: {nombre}\n")
-        archivo.write(f"Identificación: {identificacion}\n")
-        archivo.write(f"Edad: {edad}\n")
-        archivo.write(f"Correo: {usuario}\n")
-        archivo.write(f"Contraseña: {contraseña}\n")
-        archivo.write("-" * 40 + "\n")  # Separador entre registros
-
-    print("Tu registro ha sido guardado exitosamente.")
-
-
-def iniciar_sesion():
-    # Opción de iniciar sesión
-    print("---------------Iniciar Sesión--------------------")
-
-    while True:  # Bucle while para solicitar datos hasta que sean correctos
-        usuario_login = input("Ingrese su correo: ")
-        contraseña_login = input("Ingrese su contraseña: ")
-
-        # Verificar si el usuario y la contraseña existen en el archivo
-        usuario_encontrado = False
-        with open("usuarios.txt", "r", encoding="utf-8") as archivo:
-            lineas = archivo.readlines()
-            for i in range(0, len(lineas), 6):  # Cada usuario ocupa 6 líneas
-                usuario_guardado = lineas[i + 3].strip().split(": ")[1]
-                contraseña_guardada = lineas[i + 4].strip().split(": ")[1]
-
-                if usuario_guardado == usuario_login and contraseña_guardada == contraseña_login:
-                    usuario_encontrado = True
-                    break
-
-        if usuario_encontrado:
-            print("Inicio de sesión exitoso.")
-            return True
-        else:
-            print("Usuario o contraseña incorrectos. Inténtelo de nuevo.")
-            #Caso 2 
 def registrar_usuario():
     # Opción para registrar nuevo usuario
     nombre = input("Ingrese un nombre y un apellido: ")
@@ -147,11 +77,10 @@ def iniciar_sesion():
             if administrador:
                 mostrar_menu_administrador()
             else:
-                mostrar_menu_usuario()
+                menujugador()
             return True
         else:
             print("Usuario o contraseña incorrectos. Inténtelo de nuevo.")
-
 
 def mostrar_menu_administrador():
     print("Bienvenido al menú de administrador.")
@@ -186,64 +115,4 @@ def mostrar_menu_administrador():
             break
         else:
             print("Opción no válida. Intente de nuevo.")
-
-
-def mostrar_menu_usuario():
-    print("Bienvenido al menú de usuario.")
-    while True:
-        print("\nSeleccione una opción:")
-        print("1. Ver el árbol de habilidades")
-        print("2. Simular combates uno vs uno contra otros ninjas")
-        print("3. Simular un torneo completo de peleas ninja")
-        print("4. Consultar el ranking actualizado")
-        print("5. Guardar progreso e historial de sus combates")
-        print("6. Salir")
-        
-        opcion = input("Ingrese el número de la opción: ")
-
-        if opcion == "1":
-            # Lógica para ver el árbol de habilidades
-            pass
-        elif opcion == "2":
-            # Lógica para simular combate
-            pass
-        elif opcion == "3":
-            # Lógica para simular torneo
-            pass
-        elif opcion == "4":
-            # Lógica para consultar ranking
-            pass
-        elif opcion == "5":
-            # Lógica para guardar progreso
-            pass
-        elif opcion == "6":
-            print("Saliendo del menú de usuario.")
-            break
-        else:
-            print("Opción no válida. Intente de nuevo.")
-
-
-def mostrar_menu_principal():
-    while True:
-        print("\n---------- MENÚ PRINCIPAL ----------")
-        print("1. Registrarse")
-        print("2. Iniciar sesión")
-        print("3. Salir")
-        
-        opcion = input("Ingrese el número de la opción: ")
-
-        if opcion == "1":
-            registrar_usuario()
-        elif opcion == "2":
-            iniciar_sesion()
-            break  # Sale del bucle del menú una vez inicie sesión
-        elif opcion == "3":
-            print("Saliendo del programa.")
-            break
-        else:
-            print("Opción no válida. Intente de nuevo.")
-
-
-if __name__ == "__main__":
-    mostrar_menu_principal()
 

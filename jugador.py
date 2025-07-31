@@ -40,6 +40,7 @@ def menujugador():
 
             case "3":
                 print("🔍 Función Buscar Ninja aún no implementada.")
+                pass
 
             case "4":
                 print("\n Árbol de Habilidades Generado:")
