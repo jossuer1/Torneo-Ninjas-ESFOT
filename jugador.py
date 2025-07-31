@@ -78,6 +78,3 @@ def Menu_inicio():
             case _:
                 print("⚠️⚠️Opción inválida.⚠️⚠️\n(Ingresa un número del 1 al 4)")
 
-
-if __name__ == "__main__":
-    Menu_inicio()

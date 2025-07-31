@@ -1,0 +1,16 @@
+Naruto:Modo Sabio,6;Jutsu Clon de Sombra,3;Katon: Bola de Fuego,3;Genjutsu: Tsukuyomi,7;Susanoo,7
+Jiraiya:Genjutsu: Tsukuyomi,7;Rasengan,5;Kirin,5;Katon: Bola de Fuego,3;Elemento Madera,6
+Sasuke:Amaterasu,6;Chidori,5;Rasengan,5;Kirin,5;Kagemane no Jutsu,4
+Sakura:Katon: Bola de Fuego,3;Arena de Gaara,4;Kagemane no Jutsu,4;Kirin,5;Genjutsu: Tsukuyomi,7
+Kakashi:Invocación: Gamabunta,6;Jutsu Clon de Sombra,3;Taijutsu,2;Byakugan,4;Arena de Gaara,4
+Rock Lee:Byakugan,4;Arena de Gaara,4;Genjutsu: Tsukuyomi,7;Susanoo,7;Amaterasu,6
+Neji:Taijutsu,2;Arena de Gaara,4;Chidori,5;Rasengan,5;Invocación: Gamabunta,6
+Gaara:Kirin,5;Jutsu Clon de Sombra,3;Byakugan,4;Modo Sabio,6;Genjutsu: Tsukuyomi,7
+Hinata:Susanoo,7;Rasengan,5;Kirin,5;Modo Sabio,6;Elemento Madera,6
+Shikamaru:Katon: Bola de Fuego,3;Taijutsu,2;Byakugan,4;Modo Sabio,6;Rasengan,5
+Itachi:Genjutsu: Tsukuyomi,7;Amaterasu,6;Susanoo,7;Katon: Bola de Fuego,3;Taijutsu,2
+Yamato:Elemento Madera,6;Modo Sabio,6;Byakugan,4;Rasengan,5;Taijutsu,2
+Obito:Jutsu Clon de Sombra,3;Katon: Bola de Fuego,3;Genjutsu: Tsukuyomi,7;Susanoo,7;Amaterasu,6
+Minato:Rasengan,5;Jutsu Clon de Sombra,3;Kirin,5;Taijutsu,2;Modo Sabio,6
+Tenten:Arena de Gaara,4;Byakugan,4;Chidori,5;Katon: Bola de Fuego,3;Taijutsu,2
+
