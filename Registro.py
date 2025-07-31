@@ -69,20 +69,7 @@ def iniciar_sesion():
             return True
         else:
             print("Usuario o contraseña incorrectos. Inténtelo de nuevo.")
-
-
-
-
-
-
-
-
-
-
-
-
-
-#Caso 2 
+            #Caso 2 
 def registrar_usuario():
     # Opción para registrar nuevo usuario
     nombre = input("Ingrese un nombre y un apellido: ")
