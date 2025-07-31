@@ -1,30 +1,54 @@
 from jugador import menujugador
 
 def registrar_usuario():
-    # Opción para registrar nuevo usuario
-    nombre = input("Ingrese un nombre y un apellido: ")
-    identificacion = input("Ingrese su identificación (Cédula o pasaporte): ")
-    edad = input("Ingrese su edad: ")
-    usuario = input("Registre un correo válido: ")
+    # Validar nombre (sin números)
+    while True:
+        nombre = input("Ingrese un nombre y un apellido (sin números): ")
+        if any(c.isdigit() for c in nombre):
+            print("El nombre no debe contener números. Intente de nuevo.")
+        elif nombre.strip() == "":
+            print("El nombre no puede estar vacío. Intente de nuevo.")
+        else:
+            break
+
+    # Validar identificación (cédula de 10 números)
+    while True:
+        identificacion = input("Ingrese su identificación (Cédula de 10 dígitos): ")
+        if not identificacion.isdigit():
+            print("La cédula debe contener solo números. Intente de nuevo.")
+        elif len(identificacion) != 10:
+            print("La cédula debe tener exactamente 10 dígitos. Intente de nuevo.")
+        else:
+            break
+
+    # Validar edad (número positivo)
+    while True:
+        edad = input("Ingrese su edad: ")
+        if not edad.isdigit():
+            print("La edad debe ser un número válido. Intente de nuevo.")
+        elif int(edad) <= 0:
+            print("La edad debe ser mayor a cero. Intente de nuevo.")
+        else:
+            break
+
+    # Validar correo (no vacío, puedes agregar más validaciones si quieres)
+    while True:
+        usuario = input("Registre un correo válido: ").strip()
+        if usuario == "":
+            print("El correo no puede estar vacío. Intente de nuevo.")
+        else:
+            break
 
     def validar_contraseña(contraseña):
-        # Ver si es menor a 8 para retornar un falso
         if len(contraseña) < 8:
             return False
-
-        # Verificar si hay al menos una mayúscula
-        tiene_mayuscula = any(c.isupper() for c in contraseña)
-        if not tiene_mayuscula:
+        if not any(c.isupper() for c in contraseña):
             return False
-
-        # Verificar si hay al menos un número
-        tiene_numero = any(c.isdigit() for c in contraseña)
-        if not tiene_numero:
+        if not any(c.isdigit() for c in contraseña):
             return False
-
         return True
 
-    # Bucle para asegurar que la contraseña cumpla los requisitos
+    # Bucle para validar contraseña
     while True:
         contraseña = input("Ingrese una contraseña segura (mínimo 8 caracteres, 1 mayúscula, 1 número): ")
         if validar_contraseña(contraseña):
@@ -41,39 +65,34 @@ def registrar_usuario():
         archivo.write(f"Edad: {edad}\n")
         archivo.write(f"Correo: {usuario}\n")
         archivo.write(f"Contraseña: {contraseña}\n")
-        archivo.write("-" * 40 + "\n")  # Separador entre registros
+        archivo.write("-" * 40 + "\n")
 
     print("Tu registro ha sido guardado exitosamente.")
 
 
 def iniciar_sesion():
-    # Opción de iniciar sesión
     print("---------------Iniciar Sesión--------------------")
 
-    while True:  # Bucle while para solicitar datos hasta que sean correctos
+    while True:
         usuario_login = input("Ingrese su correo: ")
         contraseña_login = input("Ingrese su contraseña: ")
 
-        # Verificar si el usuario y la contraseña existen en el archivo
         usuario_encontrado = False
-        administrador = False  # Indicador de si el usuario es administrador
+        administrador = False
         with open("usuarios.txt", "r", encoding="utf-8") as archivo:
             lineas = archivo.readlines()
-            for i in range(0, len(lineas), 6):  # Cada usuario ocupa 6 líneas
+            for i in range(0, len(lineas), 6):
                 usuario_guardado = lineas[i + 3].strip().split(": ")[1]
                 contraseña_guardada = lineas[i + 4].strip().split(": ")[1]
 
                 if usuario_guardado == usuario_login and contraseña_guardada == contraseña_login:
                     usuario_encontrado = True
-                    
-                    # Verificar si las credenciales coinciden con las del administrador
                     if usuario_login == "admin@ninjas.com" and contraseña_login == "Admin123":
                         administrador = True
                     break
 
         if usuario_encontrado:
             print("Inicio de sesión exitoso.")
-            # Si es administrador, abrir el menú de administrador
             if administrador:
                 mostrar_menu_administrador()
             else:
@@ -81,6 +100,7 @@ def iniciar_sesion():
             return True
         else:
             print("Usuario o contraseña incorrectos. Inténtelo de nuevo.")
+
 
 def mostrar_menu_administrador():
     print("Bienvenido al menú de administrador.")
