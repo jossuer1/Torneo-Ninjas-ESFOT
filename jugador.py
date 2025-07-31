@@ -1,9 +1,9 @@
 import random
-from Torneo import torneo,cargar_ninjas_desde_archivo
-from Combate  import simular_combate
+from Torneo import torneo
+from Combate  import simular_combate,cargar_ninjas_desde_archivo
 from Registro import registrar_usuario,iniciar_sesion
 from Arbol import generar_arbol_habilidades
-from main import mostrar_menu_administrador
+from Administrador import mostrar_menu_administrador
 
 def menujugador():
     ninjas = cargar_ninjas_desde_archivo()

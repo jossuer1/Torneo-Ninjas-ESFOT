@@ -1,6 +1,6 @@
 import os
 
-Ninja_Archivo = "C:/Users/aleja/OneDrive/Escritorio/Proyecto_Algoritmos/Torneo-Ninjas-ESFOT/Ninjas.txt"
+Ninja_Archivo = "Ninjas.txt"
 
 def agregar_ninja():
     print("\n--- Agregar Nuevo Ninja ---")
