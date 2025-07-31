@@ -27,11 +27,11 @@ def registrar_usuario():
             print("El nombre no debe contener números ni caracteres especiales.")
     while True:
             identificacion = input("Ingrese su identificación (Cédula o pasaporte): ").strip()
-            if 0<len(identificacion) <=10 and identificacion.isdigit():
+            if 0<len(identificacion) == 10 and identificacion.isdigit():
                 print("Identificación guardada exitosamente.")
                 break
             else:
-                print("Identificación inválida. Debe ser un número positivo.")
+                print("Identificación inválida. Deben ser 10 numeros")
             
     #Ingresar Edad
     while True:
@@ -94,6 +94,3 @@ def iniciar_sesion():
             return True
         else:
             print("Usuario o contraseña incorrectos. Inténtelo de nuevo.")
-
-
-
