@@ -2,7 +2,7 @@ from Torneo import torneo,cargar_ninjas_desde_archivo
 from Combate  import simular_combate
 from Registro import registrar_usuario,iniciar_sesion
 from Arbol import generar_arbol_habilidades
-
+import random
 def menujugador():
     ninjas = cargar_ninjas_desde_archivo()
 
@@ -18,12 +18,12 @@ def menujugador():
 
         match op_jugador:
             case "1":
-                ninja_a, ninja_b = random.sample(ninjas, 2)
-                resultado, ganador = simular_combate(ninja_a, ninja_b)
+                
                 if len(ninjas) < 2:
                     print("❌ No hay suficientes ninjas.")
                 else:
-
+                    ninja_a, ninja_b = random.sample(ninjas, 2)
+                    resultado, ganador = simular_combate(ninja_a, ninja_b)
                     resultado, ganador = simular_combate(ninja_a,ninja_b)
                     print("\n⚔️ Resultado del combate:\n", resultado)
 
@@ -38,6 +38,7 @@ def menujugador():
 
             case "3":
                 pass
+                print("Funcion no implementada")
 
             case "4":
                 print("\nÁrbol de Habilidades Generado:")
