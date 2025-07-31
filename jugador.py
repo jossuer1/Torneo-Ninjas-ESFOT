@@ -32,14 +32,14 @@ def menujugador():
 
             case "2":
                 if len(ninjas) < 16:
-                    print("❌ Se necesitan al menos 16 ninjas para pruebas Chunin.")
+                    print("Se necesitan al menos 16 ninjas para pruebas Chunin.")
                 else:
                     print(" Torneo Pruebas Chunin Iniciadas")
                     ganador = torneo(ninjas)
-                    print(f"\n🏆 ¡{ganador} ha ganado el torneo ninja!")
+                    print(f"\n ¡{ganador} ha ganado el torneo ninja!")
 
             case "3":
-                print("🔍 Función Buscar Ninja aún no implementada.")
+                print(" Función Buscar Ninja aún no implementada.")
                 pass
 
             case "4":
