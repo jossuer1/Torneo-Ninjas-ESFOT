@@ -9,7 +9,7 @@ class NodoHabilidad:
         self.derecha = None             # Habilidad mayor
 
 # ---------- Clase Árbol de Habilidades ----------
-class ArbolHabilidades:
+class ArbolHabilidades: #Se encarga de insertar las habilidades en el arbol 
     def __init__(self, habilidades=None):
         self.raiz = None
         if habilidades:

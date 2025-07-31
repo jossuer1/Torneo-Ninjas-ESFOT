@@ -18,11 +18,13 @@ def menujugador():
 
         match op_jugador:
             case "1":
+                ninja_a, ninja_b = random.sample(ninjas, 2)
+                resultado, ganador = simular_combate(ninja_a, ninja_b)
                 if len(ninjas) < 2:
                     print("❌ No hay suficientes ninjas.")
                 else:
 
-                    resultado, ganador = simular_combate
+                    resultado, ganador = simular_combate(ninja_a,ninja_b)
                     print("\n⚔️ Resultado del combate:\n", resultado)
 
             case "2":
@@ -31,6 +33,7 @@ def menujugador():
                 else:
                     print("Torneo Pruebas Chunin Iniciadas")
                     ganador = torneo(ninjas)
+                
                     print(f"\n🏆 ¡{ganador} ha ganado el torneo ninja!")
 
             case "3":
