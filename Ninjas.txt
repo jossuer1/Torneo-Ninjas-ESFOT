@@ -8,3 +8,4 @@ Gaara,9,7,10,Defensivo,1
 Hinata,7,8,7,Byakugan,0
 Shikamaru,6,7,8,Estrategia,1
 Jiraiya,10,7,9,Sennin,2
+josue,s,taijutsu,5

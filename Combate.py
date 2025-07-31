@@ -28,7 +28,7 @@ def mostrar_ganadores(archivo="ganadores1vs1.txt"):
         print(f"{nombre}: {victorias} victorias")
 
 #--------------Cargar_Archivo-----------------------------------
-def cargar_ninjas_desde_archivo(ruta="ninjas.txt"):
+def cargar_ninjas_desde_archivo(ruta="C:/Users/aleja/OneDrive/Escritorio/Proyecto_Algoritmos/Torneo-Ninjas-ESFOT/Ninjas.txt"):
     lista = []
     try:
         with open(ruta, "r", encoding="utf-8") as archivo:

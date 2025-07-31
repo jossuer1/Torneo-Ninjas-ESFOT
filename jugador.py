@@ -3,6 +3,7 @@ from Torneo import torneo,cargar_ninjas_desde_archivo
 from Combate  import simular_combate
 from Registro import registrar_usuario,iniciar_sesion
 from Arbol import generar_arbol_habilidades
+from main import mostrar_menu_administrador
 
 def menujugador():
     ninjas = cargar_ninjas_desde_archivo()
@@ -38,9 +39,9 @@ def menujugador():
                     print(f"\n🏆 ¡{ganador} ha ganado el torneo ninja!")
 
             case "3":
-                pass
+                
                 print("Funcion no implementada")
-
+                pass
             case "4":
                 print("\nÁrbol de Habilidades Generado:")
                 arbol = generar_arbol_habilidades()
@@ -58,7 +59,8 @@ def Menu_inicio():
         print("\n=== MENÚ PRINCIPAL ===")
         print("1) Registrarse")
         print("2) Iniciar sesión")
-        print("3) Salir")
+        print("3) Administrador")
+        print("4) Salir")
         opcion = input("Seleccione una opción: ")
 
         match opcion:
@@ -69,6 +71,8 @@ def Menu_inicio():
                     print("Bienvenido a Naruto Shippuden: Ultimate Ninja.")
                     menujugador()
             case "3":
+                mostrar_menu_administrador()
+            case "4":
                 print("Cerrando experiencia Ninja.")
                 exit()
             case _:
