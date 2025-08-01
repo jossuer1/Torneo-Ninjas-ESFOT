@@ -1,92 +1,200 @@
 import random
-from Arbol import generar_arbol_habilidades  
+from datetime import datetime
+from gestion_ninjas import cargar_ninjas_desde_archivo, buscar_ninja_lineal, guardar_ninjas_en_archivo
+from Arbol import ArbolHabilidades, generar_arbol_habilidades
+from leer_y_escribir import adjuntar_a_archivo, leer_archivo_lineas, escribir_archivo_lineas
 
-#--------------Guardar_Archivo----------------------------------
-def guardar_ganador(nombre, archivo="ganadores1vs1.txt"):
-    with open(archivo, "a", encoding="utf-8") as f:
-        f.write(nombre + "\n")
+def guardar_progreso_jugador(user_email, victorias, derrotas):
+    archivo_personal = f"datos/combates_{user_email}.txt"
+    linea_contenido = f"Victorias: {victorias}, Derrotas: {derrotas}"
+    escribir_archivo_lineas(archivo_personal, [linea_contenido + "\n"])
+    print(f"Progreso guardado en datos/{archivo_personal}")
 
-#--------------Mostrar Ganadores----------------------------------
-def mostrar_ganadores(archivo="ganadores1vs1.txt"):
+def cargar_progreso_jugador(user_email):
+    archivo_personal = f"datos/combates_{user_email}.txt"
+    lineas = leer_archivo_lineas(archivo_personal)
+    if not lineas:
+        return 0, 0
+    
     try:
-        with open(archivo, "r", encoding="utf-8") as f:
-            nombres = [line.strip() for line in f if line.strip()]
-    except FileNotFoundError:
-        print("No hay ganadores registrados aún.")
-        return
+        ultima_linea = lineas[-1].strip()
+        partes = ultima_linea.split(", ")
+        victorias = int(partes[0].split(": ")[1])
+        derrotas = int(partes[1].split(": ")[1])
+        return victorias, derrotas
+    except (IndexError, ValueError):
+        print(f"Advertencia: Formato de progreso inválido en datos/{archivo_personal}. Reiniciando progreso.")
+        return 0, 0
 
-    if not nombres:
-        print("No hay ganadores registrados aún.")
-        return
+def cargar_arbol_habilidades_ninja(ninja_nombre):
+    lineas = leer_archivo_lineas("datos/habilidades_ninja.txt")
+    if not lineas:
+        return None
+    
+    for linea in lineas:
+        if linea.strip().startswith(f"{ninja_nombre}:"):
+            partes = linea.strip().split(":", 1)
+            if len(partes) > 1:
+                habilidades_str = partes[1]
+                habilidades_para_arbol = []
+                for habilidad_par_str in habilidades_str.split(";"):
+                    if habilidad_par_str:
+                        nombre, puntos_str = habilidad_par_str.split(",")
+                        try:
+                            habilidades_para_arbol.append((nombre, int(puntos_str)))
+                        except ValueError:
+                            print(f"Advertencia: Formato de puntos incorrecto para {nombre} en habilidades_ninja.txt")
+                            continue
+                
+                if habilidades_para_arbol:
+                    return ArbolHabilidades(habilidades_para_arbol)
+            break
+    return None
 
-    conteo_victorias = {}
-    for nombre in nombres:
-        conteo_victorias[nombre] = conteo_victorias.get(nombre, 0) + 1
+def guardar_arbol_habilidades_ninja(ninja_nombre, arbol_habilidades_obj):
+    habilidades_lista = []
+    
+    # Recorrido para obtener las habilidades sin usar .join
+    pila = [arbol_habilidades_obj.raiz]
+    while pila:
+        nodo_actual = pila.pop()
+        habilidades_lista.append((nodo_actual.nombre, nodo_actual.puntos))
+        if nodo_actual.derecha:
+            pila.append(nodo_actual.derecha)
+        if nodo_actual.izquierda:
+            pila.append(nodo_actual.izquierda)
 
-    print("\n🏆 Ranking de Ganadores 🏆")
-    for nombre, victorias in conteo_victorias.items():
-        print(f"{nombre}: {victorias} victorias")
+    habilidades_str = ""
+    for i in range(len(habilidades_lista)):
+        nombre, puntos = habilidades_lista[i]
+        habilidades_str += f"{nombre},{puntos}"
+        if i < len(habilidades_lista) - 1:
+            habilidades_str += ";"
+    
+    nueva_linea_ninja = f"{ninja_nombre}:{habilidades_str}"
 
-#--------------Cargar_Archivo-----------------------------------
-def cargar_ninjas_desde_archivo(ruta="Ninjas.txt"):
-    lista = []
-    try:
-        with open(ruta, "r", encoding="utf-8") as archivo:
-            for linea in archivo:
-                partes = linea.strip().split(",")
-                if len(partes) == 6:
-                    lista.append({
-                        "nombre": partes[0],
-                        "fuerza": int(partes[1]),
-                        "agilidad": int(partes[2]),
-                        "resistencia": int(partes[3]),
-                        "estilo": partes[4],
-                        "puntos": int(partes[5])
-                    })
-    except FileNotFoundError:
-        print(f"No se encontró el archivo '{ruta}'.")
-    return lista
+    lineas = leer_archivo_lineas("datos/habilidades_ninja.txt")
+    lineas_actualizadas = []
+    encontrado = False
+    for linea in lineas:
+        if linea.strip().startswith(f"{ninja_nombre}:"):
+            lineas_actualizadas.append(nueva_linea_ninja + "\n")
+            encontrado = True
+        else:
+            lineas_actualizadas.append(linea)
 
-#--------------Interfaz---------------------------
+    if not encontrado:
+        lineas_actualizadas.append(nueva_linea_ninja + "\n")
+
+    escribir_archivo_lineas("datos/habilidades_ninja.txt", lineas_actualizadas)
+    print(f"Árbol de habilidades de {ninja_nombre} guardado/actualizado en datos/habilidades_ninja.txt")
 
 def simular_combate(ninja_a, ninja_b):
+    print(f"\n--- INICIO DEL COMBATE: {ninja_a['nombre']} vs {ninja_b['nombre']} ---")
+    arbol_a = cargar_arbol_habilidades_ninja(ninja_a['nombre'])
+    if not arbol_a:
+        arbol_a = generar_arbol_habilidades()
+        print(f"No se encontró árbol de habilidades para {ninja_a['nombre']}. Se creará uno aleatorio.")
+        guardar_arbol_habilidades_ninja(ninja_a['nombre'], arbol_a)
     
-    arbol_a = generar_arbol_habilidades()
-    arbol_b = generar_arbol_habilidades()
-
-   
+    arbol_b = cargar_arbol_habilidades_ninja(ninja_b['nombre'])
+    if not arbol_b:
+        arbol_b = generar_arbol_habilidades()
+        print(f"No se encontró árbol de habilidades para {ninja_b['nombre']}. Se creará uno aleatorio.")
+        guardar_arbol_habilidades_ninja(ninja_b['nombre'], arbol_b)
+    
     puntos_a = ninja_a["fuerza"] + ninja_a["agilidad"] + ninja_a["resistencia"] + random.randint(0, 5)
     puntos_b = ninja_b["fuerza"] + ninja_b["agilidad"] + ninja_b["resistencia"] + random.randint(0, 5)
 
-    
+    print(f"Puntos iniciales: {ninja_a['nombre']}: {puntos_a}, {ninja_b['nombre']}: {puntos_b}")
+
     if puntos_a > puntos_b:
-        puntos_a += arbol_a.recorrido_preorden(arbol_a.raiz)# Ninja A va ganando: suma recorrido preorden (ataque)
-        puntos_b += arbol_b.recorrido_postorden(arbol_b.raiz)# Ninja B va perdiendo: suma recorrido postorden (defensa)
-
+        print(f"{ninja_a['nombre']} va ganando, usa estrategia ofensiva (Preorden).")
+        puntos_a += arbol_a.recorrido_preorden(arbol_a.raiz)
+        print(f"{ninja_b['nombre']} va perdiendo, usa estrategia defensiva (Postorden).")
+        puntos_b += arbol_b.recorrido_postorden(arbol_b.raiz)
     elif puntos_b > puntos_a:
-        # Ninja B va ganando
+        print(f"{ninja_b['nombre']} va ganando, usa estrategia ofensiva (Preorden).")
         puntos_b += arbol_b.recorrido_preorden(arbol_b.raiz)
+        print(f"{ninja_a['nombre']} va perdiendo, usa estrategia defensiva (Postorden).")
         puntos_a += arbol_a.recorrido_postorden(arbol_a.raiz)
-
     else:
-        # Empate: ambos suman recorrido inorden (estrategia equilibrada)
+        print("Empate inicial, ambos usan estrategia equilibrada (Inorden).")
         puntos_a += arbol_a.recorrido_inorden(arbol_a.raiz)
         puntos_b += arbol_b.recorrido_inorden(arbol_b.raiz)
-
-    resultado = f"{ninja_a['nombre']}: {puntos_a} pts\n{ninja_b['nombre']}: {puntos_b} pts\n"
-
-    # Determinar ganador
+    
+    ganador = None
     if puntos_a > puntos_b:
         ganador = ninja_a["nombre"]
-        resultado += f"🏆 Ganador: {ganador}"
     elif puntos_b > puntos_a:
         ganador = ninja_b["nombre"]
-        resultado += f"🏆 Ganador: {ganador}"
     else:
         ganador = random.choice([ninja_a["nombre"], ninja_b["nombre"]])
-        resultado += f"🏆 Empate, ganador aleatorio: {ganador}"
+        print("¡Combate muy reñido! Empate, el ganador se decide aleatoriamente.")
+    
+    resultado_str = (f"{ninja_a['nombre']}: {puntos_a} pts\n"
+                     f"{ninja_b['nombre']}: {puntos_b} pts\n"
+                     f"🏆 Ganador: {ganador}")
+    print(resultado_str)
 
-    guardar_ganador(ganador)
+    fecha_actual = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    historial_linea = f"{ninja_a['nombre']} vs {ninja_b['nombre']} – Ganador: {ganador} – Fecha: {fecha_actual}"
+    adjuntar_a_archivo("datos/combates.txt", historial_linea)
+    print("Combate guardado en datos/combates.txt")
 
-    return resultado, ganador
+    return resultado_str, ganador
 
+def simular_combate_menu_usuario(user_email):
+    ninjas = cargar_ninjas_desde_archivo()
+    if len(ninjas) < 2:
+        print("Se necesitan al menos dos ninjas para el combate.")
+        return
+
+    print("\n--- Seleccione a los ninjas para el combate ---")
+    for i, ninja in enumerate(ninjas):
+        print(f"{i+1}. {ninja['nombre']} (Puntos: {ninja['puntos']})")
+    
+    ninja_a = None
+    ninja_b = None
+    
+    while ninja_a is None:
+        opcion_a = input("Seleccione el número del primer ninja: ")
+        try:
+            indice_a = int(opcion_a) - 1
+            if 0 <= indice_a < len(ninjas):
+                ninja_a = ninjas[indice_a]
+            else:
+                print("Número no válido. Inténtelo de nuevo.")
+        except ValueError:
+            print("Entrada inválida. Debe ser un número.")
+            
+    while ninja_b is None:
+        opcion_b = input("Seleccione el número del segundo ninja: ")
+        try:
+            indice_b = int(opcion_b) - 1
+            if 0 <= indice_b < len(ninjas):
+                if indice_a == indice_b:
+                    print("No puedes seleccionar al mismo ninja. Elige otro.")
+                else:
+                    ninja_b = ninjas[indice_b]
+            else:
+                print("Número no válido. Inténtelo de nuevo.")
+        except ValueError:
+            print("Entrada inválida. Debe ser un número.")
+
+    _, ganador = simular_combate(ninja_a, ninja_b)
+    
+    victorias, derrotas = cargar_progreso_jugador(user_email)
+    if ganador == ninja_a['nombre']:
+        victorias += 1
+    elif ganador == ninja_b['nombre']:
+        derrotas += 1
+    guardar_progreso_jugador(user_email, victorias, derrotas)
+    
+    # Actualizamos los puntos de victoria del ninja en el archivo principal
+    ninjas_actualizados = cargar_ninjas_desde_archivo()
+    for ninja in ninjas_actualizados:
+        if ninja['nombre'] == ganador:
+            ninja['puntos'] += 1
+            break
+    guardar_ninjas_en_archivo(ninjas_actualizados)
