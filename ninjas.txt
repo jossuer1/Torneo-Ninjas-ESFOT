@@ -1,16 +1,16 @@
-Naruto,10,9,8,Ninjutsu,3
-Sasuke,9,10,7,Genjutsu,2
+Hinata,7,8,7,Byakugan,1
 Sakura,7,9,9,Taijutsu,1
-Kakashi,8,9,8,Ninjutsu,2
-Rock Lee,9,10,10,Taijutsu,2
-Neji,8,9,8,Byakugan,1
-Gaara,9,7,10,Defensivo,1
-Hinata,7,8,7,Byakugan,0
 Shikamaru,6,7,8,Estrategia,1
+Itachi,9,9,8,Genjutsu,7
+Madara,10,9,10,Uchiha,7
+Rock Lee,9,10,10,Taijutsu,2
+Tsunade,9,7,10,Médico,7
 Jiraiya,10,7,9,Sennin,2
-Itachi,9,9,8,Genjutsu,5
-Killer Bee,10,8,9,Raiton,4
-Orochimaru,8,7,7,Serpiente,3
-Tsunade,9,7,10,Médico,3
+Sasuke,9,10,7,Genjutsu,5
 Minato,10,10,8,Espacio-Tiempo,5
-Madara,10,9,10,Uchiha,6
+Kakashi,8,9,8,Ninjutsu,2
+Gaara,9,7,10,Defensivo,2
+Naruto,10,9,8,Ninjutsu,3
+Killer Bee,10,8,9,Raiton,7
+Orochimaru,8,7,7,Serpiente,3
+Neji,8,9,8,Byakugan,2
