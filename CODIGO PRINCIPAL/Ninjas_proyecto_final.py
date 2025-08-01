@@ -1,12 +1,7 @@
 import random
 from collections import deque
-from datetime import datetime # Necesario para la fecha en el historial de combates
+from datetime import datetime 
 
-# ==============================================================================
-# 1. Clases para el Árbol de Habilidades
-# ==============================================================================
-
-# ---------- Clase Nodo ----------
 class NodoHabilidad:
     def __init__(self, nombre, puntos):
         self.nombre = nombre
@@ -14,8 +9,8 @@ class NodoHabilidad:
         self.izquierda = None
         self.derecha = None
 
-# ---------- Clase Árbol de Habilidades ----------
-class ArbolHabilidades: # Se encarga de insertar las habilidades en el arbol
+
+class ArbolHabilidades: 
     def __init__(self, habilidades=None):
         self.raiz = None
         if habilidades:
@@ -41,7 +36,7 @@ class ArbolHabilidades: # Se encarga de insertar las habilidades en el arbol
             else:
                 self._insertar_recursivo(actual.derecha, nuevo)
 
-    # ---------- Recorridos que suman puntos ----------
+
     def recorrido_preorden(self, nodo):
         if nodo is None:
             return 0
@@ -57,7 +52,7 @@ class ArbolHabilidades: # Se encarga de insertar las habilidades en el arbol
             return 0
         return self.recorrido_postorden(nodo.izquierda) + self.recorrido_postorden(nodo.derecha) + nodo.puntos
 
-    # ---------- Mostrar árbol ----------
+
     def mostrar(self, nodo=None, nivel=0, lado="Raíz"):
         if nivel == 0 and nodo is None:
             nodo = self.raiz
@@ -67,27 +62,24 @@ class ArbolHabilidades: # Se encarga de insertar las habilidades en el arbol
         self.mostrar(nodo.izquierda, nivel + 1, "Izq")
         self.mostrar(nodo.derecha, nivel + 1, "Der")
 
-    # ---------- Obtener todas las habilidades del árbol (PARA GUARDAR - VERSIÓN ITERATIVA) ----------
+   
     def obtener_habilidades_en_lista_iterativo(self):
         """Devuelve una lista plana de todas las habilidades (nombre, puntos) en el árbol de forma iterativa."""
         lista = []
         if not self.raiz:
             return lista
 
-        pila = [self.raiz] # Usamos una lista como pila (LIFO)
+        pila = [self.raiz] 
 
         while pila:
-            nodo_actual = pila.pop() # Sacar el último nodo de la pila
-            lista.append((nodo_actual.nombre, nodo_actual.puntos)) # Procesar el nodo
-
-            # Primero el derecho, luego el izquierdo para que el izquierdo se procese primero (LIFO)
+            nodo_actual = pila.pop() 
+            lista.append((nodo_actual.nombre, nodo_actual.puntos)) 
+            
             if nodo_actual.derecha:
                 pila.append(nodo_actual.derecha)
             if nodo_actual.izquierda:
                 pila.append(nodo_actual.izquierda)
         return lista
-
-# ---------- Generar árbol con 5 técnicas aleatorias (para uso temporal o si no hay árbol guardado) ----------
 def generar_arbol_habilidades():
     habilidades = [
         ("Rasengan", 5), ("Chidori", 5), ("Jutsu Clon de Sombra", 3),
@@ -100,9 +92,6 @@ def generar_arbol_habilidades():
     arbol = ArbolHabilidades(seleccionados)
     return arbol
 
-# ==============================================================================
-# 2. Funciones de Utilidad para Archivos
-# ==============================================================================
 
 def leer_archivo_lineas(ruta_archivo):
     """Lee el contenido de un archivo y devuelve una lista de líneas.
@@ -128,7 +117,7 @@ def adjuntar_a_archivo(ruta_archivo, linea):
     """Adjunta una línea de texto al final de un archivo."""
     try:
         with open(ruta_archivo, "a", encoding="utf-8") as f:
-            f.write(linea + "\n") # Agregamos un salto de línea por si acaso
+            f.write(linea + "\n") 
     except Exception as e:
         print(f"Error al adjuntar al archivo {ruta_archivo}: {e}")
 
@@ -148,11 +137,6 @@ def buscar_ninja_lineal(ninjas, valor_busqueda, campo="nombre"):
             return ninja
     return None
 
-# ==============================================================================
-# 3. Funciones de Gestión de Ninjas
-# ==============================================================================
-
-# Datos iniciales de ninjas (usados si ninjas.txt no existe)
 ninjas_iniciales_data = [
     {"nombre": "Naruto", "fuerza": 10, "agilidad": 9, "resistencia": 8, "estilo": "Ninjutsu", "puntos": 3},
     {"nombre": "Sasuke", "fuerza": 9, "agilidad": 10, "resistencia": 7, "estilo": "Genjutsu", "puntos": 2},
@@ -171,7 +155,6 @@ ninjas_iniciales_data = [
     {"nombre": "Minato", "fuerza": 10, "agilidad": 10, "resistencia": 8, "estilo": "Espacio-Tiempo", "puntos": 5},
     {"nombre": "Madara", "fuerza": 10, "agilidad": 9, "resistencia": 10, "estilo": "Uchiha", "puntos": 6}
 ]
-
 
 def cargar_ninjas_desde_archivo(ruta="ninjas.txt"):
     """Carga ninjas desde el archivo, devolviendo una lista de diccionarios."""
@@ -202,38 +185,31 @@ def guardar_ninjas_en_archivo(ninjas_list, ruta="ninjas.txt"):
     escribir_archivo_lineas(ruta, lineas_a_guardar)
     print(f"Ninjas actualizados y guardados en {ruta}")
 
-# Funciones para guardar/cargar árboles de habilidades de ninjas (manualmente)
 def guardar_arbol_habilidades_ninja(ninja_nombre, arbol_habilidades_obj):
     """Guarda el árbol de habilidades de un ninja en habilidades_ninja.txt.
     Formato: NinjaNombre:habilidad1,puntos1;habilidad2,puntos2;..."""
     
-    # Obtener todas las habilidades como una lista de tuplas (usando la versión iterativa)
     habilidades_lista = arbol_habilidades_obj.obtener_habilidades_en_lista_iterativo()
-    
-    # Convertir la lista de tuplas a un string para guardar
+
     habilidades_str = ";".join([f"{nombre},{puntos}" for nombre, puntos in habilidades_lista])
-    
-    # Crear la línea para este ninja
+ 
     nueva_linea_ninja = f"{ninja_nombre}:{habilidades_str}"
 
-    # Leer todas las líneas existentes
     lineas = leer_archivo_lineas("habilidades_ninja.txt")
     
     lineas_actualizadas = []
     encontrado = False
     for linea in lineas:
         if linea.strip().startswith(f"{ninja_nombre}:"):
-            lineas_actualizadas.append(nueva_linea_ninja + "\n") # Actualizar la línea del ninja
+            lineas_actualizadas.append(nueva_linea_ninja + "\n") 
             encontrado = True
         else:
-            lineas_actualizadas.append(linea) # Mantener las otras líneas
-    
+            lineas_actualizadas.append(linea) 
     if not encontrado:
-        lineas_actualizadas.append(nueva_linea_ninja + "\n") # Si el ninja es nuevo, añadirlo al final
+        lineas_actualizadas.append(nueva_linea_ninja + "\n")
 
     escribir_archivo_lineas("habilidades_ninja.txt", lineas_actualizadas)
     print(f"Árbol de habilidades de {ninja_nombre} guardado/actualizado en habilidades_ninja.txt")
-
 
 def cargar_arbol_habilidades_ninja(ninja_nombre):
     """Carga el árbol de habilidades de un ninja desde habilidades_ninja.txt."""
@@ -243,12 +219,12 @@ def cargar_arbol_habilidades_ninja(ninja_nombre):
     
     for linea in lineas:
         if linea.strip().startswith(f"{ninja_nombre}:"):
-            partes = linea.strip().split(":", 1) # Separar el nombre del ninja de las habilidades
+            partes = linea.strip().split(":", 1) 
             if len(partes) > 1:
                 habilidades_str = partes[1]
                 habilidades_para_arbol = []
                 for habilidad_par_str in habilidades_str.split(";"):
-                    if habilidad_par_str: # Evitar strings vacíos si hay ";;"
+                    if habilidad_par_str:
                         nombre, puntos_str = habilidad_par_str.split(",")
                         try:
                             habilidades_para_arbol.append((nombre, int(puntos_str)))
@@ -258,19 +234,13 @@ def cargar_arbol_habilidades_ninja(ninja_nombre):
                 
                 if habilidades_para_arbol:
                     return ArbolHabilidades(habilidades_para_arbol)
-            break # Encontramos al ninja, salimos del bucle
-    return None # Si el ninja no fue encontrado o no tiene habilidades
+            break 
+    return None 
 
-
-# ==============================================================================
-# 4. Funciones de Combate
-# ==============================================================================
-
-#--------------Guardar_Archivo----------------------------------
 def guardar_ganador(nombre, archivo="ganadores1vs1.txt"):
-    adjuntar_a_archivo(archivo, nombre) # Usamos la utilidad adjuntar_a_archivo
+    adjuntar_a_archivo(archivo, nombre) 
 
-#--------------Mostrar Ganadores----------------------------------
+
 def mostrar_ganadores(archivo="ganadores1vs1.txt"):
     nombres = [line.strip() for line in leer_archivo_lineas(archivo) if line.strip()]
 
@@ -289,7 +259,6 @@ def mostrar_ganadores(archivo="ganadores1vs1.txt"):
 def simular_combate(ninja_a, ninja_b):
     print(f"\n--- INICIO DEL COMBATE: {ninja_a['nombre']} vs {ninja_b['nombre']} ---")
 
-    # Intentar cargar los árboles de habilidades específicos. Si no existen, generar uno aleatorio y guardarlo.
     arbol_a = cargar_arbol_habilidades_ninja(ninja_a['nombre'])
     if not arbol_a:
         arbol_a = generar_arbol_habilidades() # Generar uno aleatorio
@@ -298,17 +267,16 @@ def simular_combate(ninja_a, ninja_b):
         
     arbol_b = cargar_arbol_habilidades_ninja(ninja_b['nombre'])
     if not arbol_b:
-        arbol_b = generar_arbol_habilidades() # Generar uno aleatorio
+        arbol_b = generar_arbol_habilidades() 
         print(f"No se encontró árbol de habilidades para {ninja_b['nombre']}. Se creará uno aleatorio.")
         guardar_arbol_habilidades_ninja(ninja_b['nombre'], arbol_b) # Guardar el nuevo árbol
     
-    # Calcular puntos base
+
     puntos_a = ninja_a["fuerza"] + ninja_a["agilidad"] + ninja_a["resistencia"] + random.randint(0, 5)
     puntos_b = ninja_b["fuerza"] + ninja_b["agilidad"] + ninja_b["resistencia"] + random.randint(0, 5)
 
     print(f"Puntos iniciales: {ninja_a['nombre']}: {puntos_a}, {ninja_b['nombre']}: {puntos_b}")
 
-    # Lógica de estrategia de árbol de habilidades
     if puntos_a > puntos_b:
         print(f"{ninja_a['nombre']} va ganando, usa estrategia ofensiva (Preorden).")
         puntos_a += arbol_a.recorrido_preorden(arbol_a.raiz)
@@ -324,7 +292,7 @@ def simular_combate(ninja_a, ninja_b):
         puntos_a += arbol_a.recorrido_inorden(arbol_a.raiz)
         puntos_b += arbol_b.recorrido_inorden(arbol_b.raiz)
     
-    # Determinar ganador final
+
     ganador = None
     if puntos_a > puntos_b:
         ganador = ninja_a["nombre"]
@@ -339,7 +307,6 @@ def simular_combate(ninja_a, ninja_b):
                      f"🏆 Ganador: {ganador}")
     print(resultado_str)
 
-    # Guardar historial de combate completo en combates.txt
     fecha_actual = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     historial_linea = f"{ninja_a['nombre']} vs {ninja_b['nombre']} – Ganador: {ganador} – Fecha: {fecha_actual}"
     adjuntar_a_archivo("combates.txt", historial_linea)
@@ -351,7 +318,7 @@ def mostrar_ranking_combates():
     """Muestra el ranking de ninjas por victorias acumuladas."""
     print("\n--- Ranking de Combates ---")
     
-    ninjas_actualizados = cargar_ninjas_desde_archivo("ninjas.txt") # Cargar la lista más reciente de ninjas
+    ninjas_actualizados = cargar_ninjas_desde_archivo("ninjas.txt") 
     
     if not ninjas_actualizados:
         print("No hay ninjas registrados para mostrar el ranking.")
@@ -367,7 +334,7 @@ def mostrar_ranking_combates():
     for i, ninja in enumerate(ranking_ordenado):
         print(f"{i+1}. {ninja['nombre']}: {ninja['puntos']} victorias")
 
-# Funciones para guardar/cargar progreso del jugador
+
 def guardar_progreso_jugador(user_email, victorias, derrotas):
     """Guarda el progreso de combates de un jugador en su archivo personal."""
     archivo_personal = f"combates_{user_email}.txt"
@@ -380,10 +347,10 @@ def cargar_progreso_jugador(user_email):
     archivo_personal = f"combates_{user_email}.txt"
     lineas = leer_archivo_lineas(archivo_personal)
     if not lineas:
-        return 0, 0 # Victorias, Derrotas
+        return 0, 0 
     
     try:
-        ultima_linea = lineas[-1].strip() # Tomar la última línea si hay varias (aunque sobrescribimos)
+        ultima_linea = lineas[-1].strip() 
         partes = ultima_linea.split(", ")
         victorias = int(partes[0].split(": ")[1])
         derrotas = int(partes[1].split(": ")[1])
@@ -393,22 +360,18 @@ def cargar_progreso_jugador(user_email):
         return 0, 0
 
 
-# ==============================================================================
-# 5. Funciones de Torneo
-# ==============================================================================
-
-def torneo(ninjas_participantes): # Ahora recibe la lista de ninjas
+def torneo(ninjas_participantes):
     print("-"*30)
     print("=== Inicio Torneo Chunin Ninja ===")
     
-    # Asegurarse de tener al menos 16 ninjas para el torneo
+
     if len(ninjas_participantes) < 16:
         print("No hay suficientes ninjas para el torneo (se necesitan 16).")
         return None
     
-    # Mezclar los ninjas para asegurar emparejamientos diferentes cada vez
+  
     random.shuffle(ninjas_participantes) 
-    participantes = ninjas_participantes[:16] # Tomar los primeros 16 mezclados
+    participantes = ninjas_participantes[:16] 
 
     ronda_num = 1
     cola = deque(participantes)
@@ -417,31 +380,29 @@ def torneo(ninjas_participantes): # Ahora recibe la lista de ninjas
         print(f"\n>>> Ronda {ronda_num} ({len(cola)} participantes restantes)")
         siguiente_ronda = deque()
 
-        # Recopilar los ninjas para esta ronda
+     
         parejas_ronda = []
         while len(cola) >= 2:
             ninja1 = cola.popleft()
             ninja2 = cola.popleft()
             parejas_ronda.append((ninja1, ninja2))
         
-        # Si queda un ninja impar, se añade directamente a la siguiente ronda (bye)
         if len(cola) == 1:
             siguiente_ronda.append(cola.popleft())
             print(f"Ninja '{siguiente_ronda[-1]['nombre']}' pasa directamente a la siguiente ronda (Bye).")
 
-        # Simular los combates de la ronda
+
         for ninja1, ninja2 in parejas_ronda:
             print(f"\nCombate: {ninja1['nombre']} vs {ninja2['nombre']}")
-            # simular_combate ya maneja el guardar el historial en 'combates.txt'
+        
             resultado, ganador_nombre = simular_combate(ninja1, ninja2) 
             print(resultado)
 
-            # Encontrar el ninja ganador en la lista original 'ninjas_participantes'
-            # para asegurar que sus puntos se actualicen en la lista que se pasará a guardar_ninjas_en_archivo
+            
             for n in ninjas_participantes:
                 if n['nombre'] == ganador_nombre:
-                    n['puntos'] += 1 # Sumar punto de victoria
-                    siguiente_ronda.append(n) # Añadir el ninja con los puntos actualizados a la siguiente ronda
+                    n['puntos'] += 1
+                    siguiente_ronda.append(n) 
                     break
 
         cola = siguiente_ronda
@@ -453,10 +414,6 @@ def torneo(ninjas_participantes): # Ahora recibe la lista de ninjas
     
     return campeon["nombre"]
 
-
-# ==============================================================================
-# 6. Funciones de Registro y Sesión
-# ==============================================================================
 
 def validar_contraseña(contraseña):
     if len(contraseña) < 8:
@@ -493,6 +450,8 @@ def registrar_usuario():
             print("La edad debe ser un número válido. Intente de nuevo.")
         elif int(edad) <= 0:
             print("La edad debe ser mayor a cero. Intente de nuevo.")
+        elif int(edad) >= 100:
+            print("La edad debe ser menor a cien. Intenta de nuevo.")
         else:
             edad = int(edad)
             break
@@ -504,16 +463,16 @@ def registrar_usuario():
         elif '@' not in usuario or '.' not in usuario:
              print("Formato de correo inválido. Intente de nuevo (ej. correo@ejemplo.com).")
         else:
-            lineas_usuarios = leer_archivo_lineas("usuarios.txt") # <-- Variable corregida aquí
+            lineas_usuarios = leer_archivo_lineas("usuarios.txt") 
             correo_existente = False
-            for i in range(0, len(lineas_usuarios), 6): # Cada usuario ocupa 6 líneas
+            for i in range(0, len(lineas_usuarios), 6): 
                 try:
-                    correo_guardado = lineas_usuarios[i + 3].strip().split(": ")[1] # <-- Variable corregida aquí
+                    correo_guardado = lineas_usuarios[i + 3].strip().split(": ")[1] 
                     if correo_guardado == usuario:
                         correo_existente = True
                         break
                 except IndexError:
-                    continue # Saltar líneas mal formadas
+                    continue 
             if correo_existente:
                 print("Este correo ya está registrado. Intente con otro.")
             else:
@@ -549,11 +508,10 @@ def iniciar_sesion():
         usuario_login = input("Ingrese su correo: ")
         contraseña_login = input("Ingrese su contraseña: ")
 
-        # Credenciales de administrador hardcodeadas
         if usuario_login == "admin@ninjas.com" and contraseña_login == "Admin123":
             print("Inicio de sesión de ADMINISTRADOR exitoso.")
-            mostrar_menu_administrador() # Llama al menú del administrador
-            return True # Retorna True para indicar que se inició sesión (como admin)
+            mostrar_menu_administrador() 
+            return True 
         
         usuario_encontrado = False
         lineas = leer_archivo_lineas("usuarios.txt")
@@ -565,7 +523,7 @@ def iniciar_sesion():
 
                 if correo_guardado == usuario_login and contraseña_guardada == contraseña_login:
                     print(f"Inicio de sesión exitoso. ¡Bienvenido, {lineas[i].strip().split(': ')[1]}!")
-                    return usuario_login # Retorna el email del usuario logeado
+                    return usuario_login 
             except (IndexError, AttributeError):
                 continue
 
@@ -575,27 +533,22 @@ def iniciar_sesion():
             print(f"Le quedan {max_intentos - intentos} intentos.")
         
     print("Ha excedido el número de intentos. Volviendo al menú principal.")
-    return None # Si fallan todos los intentos
-
-# ==============================================================================
-# 7. Funciones de Administración
-# ==============================================================================
+    return None 
 
 def agregar_ninja():
     print("\n--- Agregar Nuevo Ninja ---")
-    ninjas = cargar_ninjas_desde_archivo() # Cargar la lista actual de ninjas
+    ninjas = cargar_ninjas_desde_archivo() 
 
     nombre = input("Ingrese el nombre del ninja: ").strip()
     if buscar_ninja_lineal(ninjas, nombre, "nombre"):
         print(f"❌ El ninja '{nombre}' ya existe. No se puede agregar.")
         return
 
-    # Generar atributos aleatorios como en el documento
     fuerza = random.randint(1, 10)
     agilidad = random.randint(1, 10)
     resistencia = random.randint(1, 10)
     estilo = random.choice(["Taijutsu", "Ninjutsu", "Genjutsu"])
-    puntos = 0 # Inicia con 0 puntos
+    puntos = 0 
 
     nuevo_ninja = {
         "nombre": nombre,
@@ -607,16 +560,14 @@ def agregar_ninja():
     }
     
     ninjas.append(nuevo_ninja)
-    guardar_ninjas_en_archivo(ninjas, "ninjas.txt") # Guardar la lista actualizada
+    guardar_ninjas_en_archivo(ninjas, "ninjas.txt") 
 
     print(f"✅ Ninja '{nombre}' agregado exitosamente con atributos:")
     print(f"  Fuerza: {fuerza}, Agilidad: {agilidad}, Resistencia: {resistencia}, Estilo: {estilo}")
-    
-    # Preguntar al admin si quiere crear el árbol de habilidades para este ninja
+
     crear_arbol = input("¿Desea crear un árbol de habilidades para este ninja ahora? (s/n): ").lower()
     if crear_arbol == 's':
         crear_arbol_habilidades_para_ninja(nombre)
-
 
 def listar_ninjas_admin():
     print("\n--- Listar Ninjas ---")
@@ -636,7 +587,7 @@ def listar_ninjas_admin():
         ninjas_ordenados = ordenar_ninjas_por_puntos(ninjas)
     else:
         print("Opción no válida. Se mostrarán sin ordenar.")
-        ninjas_ordenados = ninjas # Mostrar sin ordenar si la opción es inválida
+        ninjas_ordenados = ninjas 
 
     for ninja in ninjas_ordenados:
         print(f"Nombre: {ninja['nombre']}, Fuerza: {ninja['fuerza']}, Agilidad: {ninja['agilidad']}, "
@@ -722,7 +673,6 @@ def actualizar_atributos_ninja():
         else:
             print("Opción no válida.")
         
-        # Guardar la lista de ninjas con los cambios
         guardar_ninjas_en_archivo(ninjas, "ninjas.txt")
     else:
         print(f"❌ Ninja '{nombre_buscar}' no encontrado.")
@@ -777,19 +727,18 @@ def crear_arbol_habilidades_para_ninja(ninja_nombre=None):
         print(f"❌ Ninja '{ninja_nombre}' no encontrado.")
         return
     
-    # Cargar el árbol existente si hay uno
     arbol_actual = cargar_arbol_habilidades_ninja(ninja_nombre)
     if arbol_actual:
         print(f"\nÁrbol de habilidades actual para {ninja_nombre}:")
         arbol_actual.mostrar()
         modificar = input("¿Desea modificar este árbol? (s/n): ").lower()
         if modificar != 's':
-            return # Salir si no quiere modificar
+            return 
 
-    # Crear un nuevo árbol o añadir al existente
+
     habilidades_para_arbol = []
     if arbol_actual:
-        # Usar la versión iterativa para obtener habilidades del árbol existente
+      
         habilidades_para_arbol = arbol_actual.obtener_habilidades_en_lista_iterativo()
 
     print("\nIngrese las habilidades y sus puntos (ej: 'Rasengan,5').")
@@ -806,7 +755,7 @@ def crear_arbol_habilidades_para_ninja(ninja_nombre=None):
             try:
                 puntos_habilidad = int(partes[1].strip())
                 if puntos_habilidad > 0:
-                    # Añadir/actualizar la habilidad en la lista
+                 
                     encontrado = False
                     for i, (nombre, puntos) in enumerate(habilidades_para_arbol):
                         if nombre.lower() == nombre_habilidad.lower():
@@ -864,10 +813,6 @@ def mostrar_menu_administrador():
             break
         else:
             print("Opción no válida. Intente de nuevo.")
-
-# ==============================================================================
-# 8. Menús de Usuario
-# ==============================================================================
 
 def menu_jugador_logged_in(user_email):
     """Menú para un usuario (jugador) que ha iniciado sesión."""
@@ -939,15 +884,12 @@ def menu_jugador_logged_in(user_email):
                 print(f"Se necesitan al menos 16 ninjas para el torneo. Actualmente hay {len(ninjas_para_torneo)}. Por favor, agregue más ninjas.")
             else:
                 print("¡Iniciando Torneo Chunin!")
-                campeon = torneo(ninjas_para_torneo) # Pasar la lista de ninjas al torneo
+                campeon = torneo(ninjas_para_torneo) 
                 if campeon:
-                    # Tras el torneo, los puntos de los ninjas ya se habrán actualizado en la lista
-                    # que fue pasada, así que solo necesitamos guardar esa lista.
-                    guardar_ninjas_en_archivo(ninjas_para_torneo) # Guardar los puntos acumulados del torneo
+                    
+                    guardar_ninjas_en_archivo(ninjas_para_torneo) 
                     print(f"El campeón del torneo es: {campeon}")
-                    # Opcional: ajustar el progreso del jugador si su ninja ganó el torneo
-                    # Esto requeriría saber qué ninja representa al jugador, lo cual no está implementado directamente
-                    # Asumiendo que el jugador solo ve los resultados generales.
+      
 
         elif opcion == "4":
             ninjas_usuario = cargar_ninjas_desde_archivo()
@@ -1003,19 +945,16 @@ def menu_inicio():
         if opcion == "1":
             registrar_usuario()
         elif opcion == "2":
-            user_logged_in = iniciar_sesion() # Esto puede ser True (admin) o el email (jugador) o None (fallo)
-            if user_logged_in and user_logged_in is not True: # Si es un email, es un jugador
+            user_logged_in = iniciar_sesion() 
+            
+            if user_logged_in and user_logged_in is not True: 
                 menu_jugador_logged_in(user_logged_in)
-            # Si user_logged_in es True, significa que ya se manejó el menú de administrador
-            # y no se necesita hacer nada más aquí, el bucle volverá a mostrar el menú principal.
+
         elif opcion == "3":
             print("Saliendo de la aplicación. ¡Hasta pronto!")
             break
         else:
             print("Opción no válida. Intente de nuevo.")
 
-# ==============================================================================
-# 9. Ejecución Principal
-# ==============================================================================
 if __name__ == "__main__":
     menu_inicio()
